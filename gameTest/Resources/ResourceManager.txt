@@ -1,0 +1,81 @@
+#Models: 5
+ID 0
+FILE ..\\Resources\\Woman1.nfg
+ID 1
+FILE ..\\Resources\\Woman2.nfg
+ID 2
+FILE ..\\Resources\\cube.nfg
+ID 3
+FILE ..\\Resources\\Terrain.nfg
+ID 4
+FILE ..\\Resources\\fire.nfg
+
+#2D Textures: 10
+ID 0
+FILE ..\\Resources\\Woman1.tga
+WRAP REPEAT
+FILTER LINEAR LINEAR
+ID 1
+FILE ..\\Resources\\Woman2.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 2
+FILE ..\\Resources\\Terrain_blendmap_1.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 3
+FILE ..\\Resources\\Dirt.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 4
+FILE ..\\Resources\\Grass.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 5
+FILE ..\\Resources\\Rock.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 6
+FILE ..\\Resources\\heightmap.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 7
+FILE ..\\Resources\\fire3.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 8
+FILE ..\\Resources\\DisplacementMap.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+ID 9
+FILE ..\\Resources\\fire_mask.tga
+WRAP REPEAT
+FILTER LINEAR_LINEAR LINEAR
+
+#Cube Textures: 1
+ID 0
+FILE ..\\Resources\\envMap.tga
+WRAP CLAMP
+FILTER LINEAR LINEAR
+
+#Shaders: 4
+ID 0
+../Resources/Shaders/TriangleShaderVS.vs
+../Resources/Shaders/TriangleShaderFS.fs
+STATES 1
+GL_DEPTH_TEST 1
+ID 1
+../Resources/Shaders/CubeShaderVS.vs 
+../Resources/Shaders/CubeShaderFS.fs
+STATES 1
+GL_DEPTH_TEST 1
+ID 2
+../Resources/Shaders/TerrainShaderVS.vs 
+../Resources/Shaders/TerrainShaderFS.fs
+STATES 1
+GL_DEPTH_TEST 1
+ID 3
+../Resources/Shaders/UVDisplacementShaderVS.vs 
+../Resources/Shaders/UVDisplacementShaderFS.fs
+STATES 1
+GL_DEPTH_TEST 1
