@@ -123,3 +123,7 @@ void Ground::setShader(Shaders * shader)
 {
 	m_shader = shader;
 }
+
+Texture* Ground::getTexture() {
+	return m_texture;
+}

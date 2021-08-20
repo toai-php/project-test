@@ -71,6 +71,7 @@ public:
 	void SetIsTarget(bool Target) { m_bIsTarget = Target; }
 	bool GetIsTarget() { return m_bIsTarget; }
 
+	void DeleteObject();
 	void SetBodyObject(b2World* world);
 };
 

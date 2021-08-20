@@ -6,7 +6,8 @@
 
 Enemy::~Enemy()
 {
-	if (m_Model != NULL) delete m_Model;
+//	if (m_Model != NULL) delete m_Model;
+	printf("hello\n");
 }
 
 void Enemy::SetHP(float hp) {
@@ -115,3 +116,4 @@ void Enemy::UpdateAnimation(float deltaTime) {
 		m_Model->updateAnimation(deltaTime, m_current_anim);
 	}
 }
+

@@ -43,5 +43,6 @@ public:
 	std::vector<Animation*> getAnim() {
 		return m_anim;
 	}
+	void DeleteAnimation();
 };
 

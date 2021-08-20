@@ -36,7 +36,6 @@ Texture* Object::getTexture() {
 
 
 Object::~Object() {
-
 }
 
 void Object::InitWVP()
@@ -189,4 +188,7 @@ void Object::UpdateAnimation(float deltaTime) {
 	if (m_Model->b_IsAnimation == true) {
 		m_Model->updateAnimation(deltaTime, m_current_anim);
 	}
+}
+
+void Object::DeleteObject() {
 }

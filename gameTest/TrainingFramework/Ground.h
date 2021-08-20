@@ -19,6 +19,7 @@ public:
 	int addNewV(Vertex v);
 	void setTexture(Texture * tex);
 	void setShader(Shaders * shader);
+	Texture* getTexture();
 private:
 
 	Matrix m_WorldMatrix;
