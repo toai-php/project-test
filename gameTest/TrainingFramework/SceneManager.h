@@ -34,6 +34,7 @@ private:
 	std::vector<Bullet*> m_ListGunOfEnemy;
 	std::vector<Bullet*> m_listBulletInWorld;
 	std::vector<Enemy*> m_listEnemy;
+	std::vector<Enemy*> m_listEnemyTest;
 	std::vector<Enemy*> m_listEnemyInWorld;
 
 	int m_direction;

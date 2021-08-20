@@ -281,7 +281,6 @@ void SceneManager::ReadMap(FILE *f_MAP) {
 	int n = WIDTH / (col / 18 + 8 / 9);
 	Model* backgroundModel = new Model();
 	backgroundModel->InitSprite(0, 0, n * (width * col / height), n * col, n * (width * col / height), n * col);
-
 	for (int i = 0; i < num; i++) {
 		Terrain *background = new Terrain(0);
 		background->setModel(backgroundModel);
@@ -321,6 +320,7 @@ void SceneManager::ReadMap(FILE *f_MAP) {
 			}
 		}
 		m_mapEnemy[{posRow, posCol}] = enemy;
+		m_listEnemyTest.push_back(enemy);
 	}
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < m_ListGunOfEnemy.size(); j++) {
@@ -390,6 +390,9 @@ void SceneManager::AddBullet(Bullet* bullet) {
 
 void SceneManager::RemoveBullet(int index) {
 	m_world->DestroyBody(m_listBulletInWorld[index]->getBody());
+//	m_listBulletInWorld[index]->DeleteObject();
+//	delete m_listBulletInWorld[index]->getModel();
+	delete m_listBulletInWorld[index];
 	m_listBulletInWorld.erase(m_listBulletInWorld.begin() + index);
 }
 
@@ -449,24 +452,84 @@ void SceneManager::OnMouseButtonMove(int X, int Y, char Button) {
 
 void SceneManager::CleanUp() {
 	Camera::GetInstance()->CleanUp();
+
+	printf("start delete\n");
 	for (int i = 0; i < (int)m_listTerrain.size(); i++) {
 		for (int j = 0; j < (int)m_listTerrain[i].size(); j++) {
-			if (m_listTerrain[i][j] != NULL) m_listTerrain[i][j]->CleanUp();
+			if (m_listTerrain[i][j] != NULL) {
+				m_listTerrain[i][j]->CleanUp();
+//				delete m_listTerrain[i][j]->getModel();
+				delete m_listTerrain[i][j];
+			}
 		}
 	}
+	delete m_ListBackground[0]->getModel();
+	for (int i = 0; i < (int)m_ListBackground.size(); i++) {
+		delete m_ListBackground[i];
+	}
+
+	printf("delete map\n");
 	m_MainCharacter->CleanUp();
-	//	m_boss->CleanUp();
+	delete m_MainCharacter->getModel();
+	delete m_MainCharacter;
+	printf("delete main\n");
+	m_boss->CleanUp();
+	delete m_boss->getModel();
+	delete m_boss;
 	for (int i = 0; i < (int)m_listEnemyInWorld.size(); i++) {
-		m_listEnemyInWorld[i]->CleanUp();
+//		m_listEnemyInWorld[i]->CleanUp();
+//		delete m_listEnemyInWorld[i]->GetBullet();
+		printf("delete e bullet\n");
+//		if(m_listEnemyInWorld[i])
+//			delete m_listEnemyInWorld[i];
+		printf("delete e\n");
 
 	}
+
+	printf("delete enemy\n");
 
 	for (int i = 0; i < m_ListGunOfPlayer.size(); i++) {
 		m_ListGunOfPlayer[i]->CleanUp();
+//		m_ListGunOfPlayer[i]->DeleteObject();
+//		if(m_ListGunOfPlayer[i])
+		delete m_ListGunOfPlayer[i]->getModel();
+		delete m_ListGunOfPlayer[i];
 	}
+	printf("delete gun p\n");
+	m_mapEnemy.clear();
+	for (std::map<std::pair<int, int>, Enemy*>::iterator x = m_mapEnemy.begin(); x != m_mapEnemy.end(); x++) {
+		delete m_mapEnemy[{(x->first).first, (x->first).second}]->getModel();
+		delete m_mapEnemy[{(x->first).first, (x->first).second}];
+	}
+
+	for (int i = 0; i < (int)m_listBulletInWorld.size(); i++) {
+		delete m_listBulletInWorld[i];
+	}
+
 	for (int i = 0; i < (int)m_ListGunOfEnemy.size(); i++) {
 		m_ListGunOfEnemy[i]->CleanUp();
+//		if(m_ListGunOfEnemy[i])
+		delete m_ListGunOfEnemy[i]->getModel();
+		delete m_ListGunOfEnemy[i];
 	}
+
+	for (int i = 0; i < (int)m_listEnemy.size(); i++) {
+//		m_listEnemy[i]->getModel()->DeleteAnimation();
+		delete m_listEnemy[i]->getModel();
+		delete m_listEnemy[i];
+	}
+
+	Enemy* enemy = new Enemy(1);
+	delete enemy;
+	for (int i = 0; i < (int)m_listEnemyTest.size(); i++) {
+		delete m_listEnemyTest[i]->getModel();
+		delete m_listEnemyTest[i];
+	}
+
+	printf("delete gun e\n");
+	
+	delete groundTest->getTexture();
+	delete groundTest;
 	delete m_world;
 }
 
@@ -682,7 +745,7 @@ void SceneManager::Update(float deltaTime) {
 			if (mapEnemy[{i, j}] == 1) {
 				m_mapEnemy[{i, j}]->SetBodyObject(m_world);
 				AddEnemy(m_mapEnemy[{i, j}]);
-				mapEnemy[{i, j}] = 0;
+				mapEnemy[{i, j}] = -1;
 			}
 		}
 	}
@@ -872,6 +935,8 @@ void SceneManager::Update(float deltaTime) {
 					}
 				}
 				m_world->DestroyBody(m_listEnemyInWorld[i]->getBody());
+//				m_listEnemyInWorld[i]->DeleteObject();
+//				delete m_listEnemyInWorld[i];
 				m_listEnemyInWorld.erase(m_listEnemyInWorld.begin() + i);
 				i--;
 			}

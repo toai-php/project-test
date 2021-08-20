@@ -21,6 +21,12 @@ Model::Model(Model * model) {
 }
 
 Model::~Model() {
+//	delete[] verticesData;
+//	for (int i = 0; i < m_anim.size(); i++) delete m_anim[i];
+//	verticesData = NULL;
+}
+
+void Model::DeleteAnimation() {
 	delete[] verticesData;
 	for (int i = 0; i < m_anim.size(); i++) delete m_anim[i];
 	verticesData = NULL;

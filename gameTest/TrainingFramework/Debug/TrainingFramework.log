@@ -1,1 +1,35 @@
-﻿
+﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  SceneManager.cpp
+c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winnt.h(12820): warning C4005: 'MEM_FREE': macro redefinition
+  d:\20202\20203\project-test\gametest\trainingframework\stdafx.h(16): note: see previous definition of 'MEM_FREE'
+d:\20202\20203\project-test\gametest\trainingframework\define.h(4): warning C4005: 'PI': macro redefinition
+  d:\20202\20203\project-test\gametest\trainingframework\stdafx.h(18): note: see previous definition of 'PI'
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(58): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(63): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(138): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(1197): note: see declaration of 'fscanf'
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(281): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(283): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(289): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(316): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(326): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(242): warning C4101: 'c': unreferenced local variable
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(491): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(546): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(705): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(735): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(736): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(737): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(738): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(781): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(856): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(867): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(912): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(917): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(932): warning C4018: '<': signed/unsigned mismatch
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(965): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\20202\20203\project-test\gametest\trainingframework\scenemanager.cpp(996): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  TrainingFramework.vcxproj -> D:\20202\20203\project-test\gameTest\\BIN\TrainingFramework.exe
