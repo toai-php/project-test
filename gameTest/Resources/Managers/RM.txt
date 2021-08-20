@@ -1,0 +1,143 @@
+#Animations: 26
+ID 0
+FILE ../Resources/Animation/Idle.txt
+SPEED 0.1 -1
+ID 1
+FILE ../Resources/Animation/Run.txt
+SPEED 0.1 -1
+ID 2
+FILE ../Resources/Animation/jump.txt
+SPEED 0.1 -1
+ID 3
+FILE ../Resources/Animation/RunJump.txt
+SPEED 0.1 -1
+ID 4
+FILE ../Resources/Animation/fall.txt
+SPEED 0.1 -1
+ID 5
+FILE ../Resources/Animation/Gun0.txt
+SPEED 0.1 2
+ID 6
+FILE ../Resources/Animation/Gun1.txt
+SPEED 0.1 6
+ID 7
+FILE ../Resources/Animation/Gun2.txt
+SPEED 0.1 4
+ID 8
+FILE ../Resources/Animation/Gun3.txt
+SPEED 0.07 8
+ID 9
+FILE ../Resources/Animation/shortgun.txt
+SPEED 0.1 -1
+ID 10
+FILE ../Resources/Animation/bazoka.txt
+SPEED 0.1 -1
+ID 11
+FILE ../Resources/Animation/hellgun1.txt
+SPEED 0.1 -1
+ID 12
+FILE ../Resources/Animation/hellgun2.txt
+SPEED 0.1 -1
+ID 13
+FILE ../Resources/Animation/defend.txt
+SPEED 0.1 -1
+ID 14
+FILE ../Resources/Animation/Wounded.txt
+SPEED 0.1 -1
+ID 15
+FILE ../Resources/Animation/enemy1Walk.txt
+SPEED 0.1 -1
+ID 16
+FILE ../Resources/Animation/enemybullet.txt
+SPEED 0.1 -2
+ID 17
+FILE ../Resources/Animation/enemy1Fire.txt
+SPEED 0.1 -1
+ID 18
+FILE ../Resources/Animation/boss.txt
+SPEED 0.1 -1
+ID 19
+FILE ../Resources/Animation/enemy2Walk.txt
+SPEED 0.1 -1
+ID 20
+FILE ../Resources/Animation/enemy2Fire.txt
+SPEED 0.1 -1
+ID 21
+FILE ../Resources/Animation/enemy3Walk.txt
+SPEED 0.1 -1
+ID 22
+FILE ../Resources/Animation/enemy3Fire.txt
+SPEED 0.1 -1
+ID 23
+FILE ../Resources/Animation/enemy4Walk.txt
+SPEED 0.1 -1
+ID 24
+FILE ../Resources/Animation/enemy4Fire.txt
+SPEED 0.1 -1
+ID 25
+FILE ../Resources/Animation/enemybullet2.txt
+SPEED 0.1 -1
+
+#2D Textures: 21
+ID 0
+FILE ../Resources/Textures/MainCharacterFinal.tga
+ID 1
+FILE ../Resources/TexturesAnimation/shortgunbullet.tga
+ID 2
+FILE ../Resources/TexturesAnimation/bazokabullet.tga
+ID 3
+FILE ../Resources/TexturesAnimation/hellgunbullet.tga
+ID 4
+FILE ../Resources/TexturesAnimation/defendbullet.tga
+ID 5
+FILE ../Resources/Textures/enemy1.tga
+ID 6
+FILE ../Resources/TexturesAnimation/enemybullet.tga
+ID 7
+FILE ../Resources/Textures/Buttons/button_play.tga
+ID 8
+FILE ../Resources/Textures/Buttons/button_options.tga
+ID 9
+FILE ../Resources/Textures/Buttons/button_exit.tga
+ID 10
+FILE ../Resources/Tile/background.tga
+ID 11
+FILE ../Resources/Tile/background1.tga
+ID 12
+FILE ../Resources/Textures/logo.tga
+ID 13
+FILE ../Resources/Textures/Buttons/button_aboutme.tga
+ID 14
+FILE ../Resources/Textures/Buttons/button_reset.tga
+ID 15
+FILE ../Resources/Textures/Buttons/button_X2.tga
+ID 16
+FILE ../Resources/Textures/boss.tga
+ID 17
+FILE ../Resources/Textures/enemy2.tga
+ID 18
+FILE ../Resources/Textures/enemy3.tga
+ID 19
+FILE ../Resources/Textures/enemy4.tga
+ID 20
+FILE ../Resources/TexturesAnimation/enemybullet2.tga
+
+#Background: 1
+ID 0
+FILE ../Resources/Tile/background.tga
+
+#Tile: 0
+
+#Shaders: 2
+ID 0
+VS ../Resources/Shaders/ModelShaderVS.vs
+FS ../Resources/Shaders/ModelShaderFS.fs
+STATES 2
+GL_DEPTH_TEST 1
+GL_CULL_FACE 0
+ID 1
+VS ../Resources/Shaders/Sprite2DShaderVS.vs
+FS ../Resources/Shaders/Sprite2DShaderFS.fs
+STATES 2
+GL_DEPTH_TEST 1
+GL_CULL_FACE 0

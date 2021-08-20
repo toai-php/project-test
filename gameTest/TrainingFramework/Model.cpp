@@ -1,85 +1,103 @@
-#include <stdafx.h>
-
+#include "stdafx.h"
+#include "../Utilities/utilities.h" // if you use STL, please include this line AFTER all other include
 #include "Model.h"
-#include <stdio.h>
+#include "Vertex.h"
+#include <iostream>
 
 
-Model::Model() {
-
+Model::Model()
+{
+	b_IsAnimation = false;
 }
 
-Model::~Model(){
-	
-}
-
-void Model::Init(char *filename) {
-	FILE* file = fopen(filename, "r");
-	int numberOfVertices;
-	fscanf(file, "NrVertices: %d\n", &numberOfVertices);
-	numOfVertices = numberOfVertices;
-	vertices = new Vertex[numberOfVertices];
-	for (int i = 0; i < numberOfVertices; ++i)
-	{
-		fscanf(file, "   %*d. pos:[%f, %f, %f]; norm:[%f, %f, %f]; binorm:[%*f, %*f, %*f]; tgt:[%*f, %*f, %*f]; uv:[%f, %f];\n",
-			&vertices[i].position.x, &vertices[i].position.y, &vertices[i].position.z,
-			&vertices[i].normal.x, &vertices[i].normal.y, &vertices[i].normal.z,
-			&vertices[i].uv.x, &vertices[i].uv.y);
+Model::Model(Model * model) {
+	InitSprite(model->m_posX, model->m_posY, model->m_spriteW, model->m_spriteH, model->m_textureW, model->m_textureH);
+	std::vector<Animation*> v = model->getAnim();
+	for (int i = 0; i < v.size(); i++) {
+		Animation* anim = new Animation(v[i]);
+		addAnimation(anim);
 	}
+	if (v.size() > 0) b_IsAnimation = true;
+}
 
-	int numberOfIndices;
-	fscanf(file, "NrIndices: %d\n", &numberOfIndices);
-	indices = new int[numberOfIndices];
-	numOfIndices = numberOfIndices;
-	for (int i = 0; i < numberOfIndices; i += 3)
-	{
-		fscanf(file, "   %*d.    %d,    %d,    %d\n", &indices[i], &indices[i + 1], &indices[i + 2]);
+Model::~Model() {
+	delete[] verticesData;
+	for (int i = 0; i < m_anim.size(); i++) delete m_anim[i];
+	verticesData = NULL;
+}
+
+void Model::InitSprite(float spriteX, float spriteY, float spriteW, float spriteH, float textureW, float textureH)
+{
+	m_posX = spriteX; m_posY = spriteY; m_spriteW = spriteW; m_spriteH = spriteH;
+	m_textureH = textureH; m_textureW = textureW;
+	m_NumberOfVertices = 4;
+	verticesData = new Vertex[m_NumberOfVertices];
+	origin = Vector2((m_posX + m_spriteW) / 2, (m_posY + m_spriteH) / 2);
+	Vector3 delta = Vector3(origin.x - spriteW / 2, origin.y - spriteH / 2, 0.0);
+	verticesData[0].pos = Vector3(-(float)spriteW / 2, -(float)spriteH / 2, 0.0f) - delta;
+	verticesData[1].pos = Vector3((float)spriteW / 2, -(float)spriteH / 2, 0.0f) - delta;
+	verticesData[2].pos = Vector3(-(float)spriteW / 2, (float)spriteH / 2, 0.0f) - delta;
+	verticesData[3].pos = Vector3((float)spriteW / 2, (float)spriteH / 2, 0.0f) - delta;
+	verticesData[0].uv = Vector2((float)spriteX / textureW, (float)(spriteY + spriteH) / textureH);
+	verticesData[1].uv = Vector2((float)(spriteX + spriteW) / textureW, (float)(spriteY + spriteH) / textureH);
+	verticesData[2].uv = Vector2((float)spriteX / textureW, (float)spriteY / textureH);
+	verticesData[3].uv = Vector2((float)(spriteX + spriteW) / textureW, (float)spriteY / textureH);
+
+	m_NumberOfIndices = 6;
+	glGenBuffers(1, &vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_NumberOfVertices, verticesData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	delete[] verticesData;
+}
+
+void Model::setOrigin(Vector2 ori)
+{
+	origin = Vector2((m_posX + m_spriteW) / 2, (m_posY + m_spriteH) / 2);
+}
+
+void Model::addAnimation(Animation* anm)
+{
+	m_anim.push_back(anm);
+}
+
+void Model::updateAnimation(float deltaTime, int type)
+{
+	bool revert = (type > 0) ? 0 : 1;
+	type = abs(type);
+	m_anim[type - 1]->play(&vboId, Vector2(m_textureW, m_textureH), origin, deltaTime, revert);
+}
+
+void Model::resetGun() {
+	for (int i = 0; i < m_anim.size(); i++) {
+		if (m_anim[i]->isGun) m_anim[i]->resetAnimation();
 	}
-	fclose(file);
 }
 
-void Model::loadHeight(char* filename) {
-		int width = 0;
-		int height = 0;
-		int bpp = 0;
+void Model::resetTexture()
+{
+	Vector4 frame = getAnimation(0)->getTexture();
+	float x = frame.x, y = frame.y, w = frame.z, h = frame.w;
 
-		char *imageData = LoadTGA(filename, &width, &height, &bpp);
+	Vector3 delta = Vector3(origin.x - w / 2, origin.y - h / 2, 0.0);
+	verticesData[0].pos = Vector3(-(float)w / 2, -(float)h / 2, 0.0f) - delta;
+	verticesData[1].pos = Vector3((float)w / 2, -(float)h / 2, 0.0f) - delta;
+	verticesData[2].pos = Vector3(-(float)w / 2, (float)h / 2, 0.0f) - delta;
+	verticesData[3].pos = Vector3((float)w / 2, (float)h / 2, 0.0f) - delta;
 
-		for (int i = 0; i < numOfVertices; i++) {
-			int x = int(vertices[i].uv.x * width);
-			int y = int(vertices[i].uv.y * height);
-			vertices[i].position.y = imageData[x*width * bpp/8 + y * bpp/8] * GLfloat(0.05);
-		}
-		float *d = new float[numOfVertices];
-		int m = int(sqrt(numOfVertices));
-		int n = int(sqrt(numOfVertices));
+	x /= m_textureW;
+	y /= m_textureH;
+	w /= m_textureW;
+	h /= m_textureH;
 
-		for (int i = 0; i < m; i++) {
-			for (int j = 0; j < n; j++) {
-				float c = vertices[i * m + j].position.y;
-				int count = 1;
-				if (i > 0) {
-					c += vertices[(i-1)*m + j].position.y;
-					count++;
-				}
-				if (j > 0) {
-					c += vertices[i * m + j-1].position.y;
-					count++;
-				}
-				if (i < m-1) {
-					c += vertices[(i + 1) * m + j].position.y;
-					count++;
-				}
-				if (j < n -1) {
-					c += vertices[i * m + j+1].position.y;
-					count++;
-				}
-				d[i * m + j] = c / count;
-			}
-		}
-		for (int i = 0; i < numOfVertices; i++) {
-			vertices[i].position.y = d[i];
-		}
-		
-		delete[] d;
-		delete[] imageData;
+	verticesData[0].uv = Vector2(x, y + h);
+	verticesData[1].uv = Vector2(x + w, y + h);
+	verticesData[2].uv = Vector2(x, y);
+	verticesData[3].uv = Vector2(x + w, y);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 4, verticesData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+

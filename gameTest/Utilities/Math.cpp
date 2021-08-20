@@ -186,6 +186,13 @@ GLfloat Vector3::operator [] (unsigned int idx)
 	return (&x)[idx];
 }
 
+bool Vector3::operator== (Vector3 vector) {
+	if (x != vector.x) return false;
+	if (y != vector.y) return false;
+	if (z != vector.z) return false;
+	return true;
+}
+
 Vector3 Vector3::Modulate(Vector3 & vector)
 {
 	return Vector3(x * vector.x, y * vector.y, z * vector.z);

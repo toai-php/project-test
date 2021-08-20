@@ -1,16 +1,17 @@
-attribute vec3 a_posL;
+attribute vec3 a_Position;
 attribute vec2 a_uv;
 
-uniform mat4 u_mvpMatrix;
-uniform sampler2D heightMap;
-
 varying vec2 v_uv;
-varying float dis;
+varying float v_dist;
+
+uniform mat4 u_WVP;
+uniform sampler2D u_Heightmap;
 
 void main()
 {
-vec4 posL = vec4(a_posL, 1.0);
-gl_Position = u_mvpMatrix*posL;
-dis = length(gl_Position.xyz);
-v_uv = a_uv;
+	v_dist = length(u_WVP * vec4(a_Position, 1.0));
+	vec3 vertex = a_Position;
+	vertex.y = texture2D(u_Heightmap, a_uv).r * 10.0;
+	gl_Position = u_WVP * vec4(vertex, 1.0);
+	v_uv = a_uv;
 }

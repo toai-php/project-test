@@ -1,47 +1,76 @@
 #pragma once
-#include <math.h>
+
+#include <conio.h>
 #include "Shaders.h"
-#include "Texture.h"
 #include "Model.h"
-#include "Camera.h"
-#include "../Utilities/utilities.h"
+#include "Texture.h"
+#include "b2_body.h"
+#include <b2_world.h>
+#include <b2_polygon_shape.h>
+#include <b2_fixture.h>
+#include <b2_circle_shape.h>
+#include <b2_edge_shape.h>
+#include <b2_contact.h>
 
-#define PI 3.1459f
+class Object
+{
+protected:
+	std::vector<GLuint> textureId;
+	std::vector<Texture*> m_Texture;
+	Shaders* m_Shader;
+	Model* m_Model;
 
+	float m_spriteX, m_spriteY, m_spriteW, m_spriteH;
 
-class Object {
-public:
-	Texture *m_texture;
-	Model m_model;
-	Shaders m_shaders;
-	Matrix m_worldMatrix;
+	b2Body* m_body;
+
+	Vector3 m_Position;
+	Vector3 m_Scale;
+	Vector3 m_Rotation;
+
+	Matrix m_WorldMatrix;
+	Matrix m_ScaleMatrix;
 	Matrix m_WVP;
 
-	float m_deltatime;
-	int m_iObjectID;
-	int m_numOfTexture;
-	int m_numOfCube;
-	int m_shaderID;
-	GLuint vboId;
-	GLuint iboId;
-	GLuint *textureID;
-	Vector3 m_position;
-	Vector3 m_scale;
-	Vector3 m_rotation;
+	int m_ObjectID;
+	bool m_bIsTarget = false, m_isTexture = false;
 
-	Object();
+public:
+	int m_current_anim;
+	Object(int ID);
 	~Object();
-	void SetID(int id);
-	void SetnumOfCube(int numOfCube);
-	void SetnumOfTexture(int numOfTexture);
-	void SetnumOfShader(int shaderID);
-	void SetPosition(float x, float y, float z);
-	void SetScale(float x, float y, float z);
-	void SetRotation(float x, float y, float z);
-	void Init(char** fileTexture, char* fileModel, char* fileVS, char* fileFS);
-	void loadCube(char* fileModel, char* filename);
+	void InitWVP();
 	void Draw();
-	void IntMVP();
+	virtual void Update(float deltaTime);
 	void CleanUp();
-	void Update(float deltaTime);
+	void setModel(Model* mmodel);
+	void setShader(Shaders* mshader);
+	void UpdateWVP();
+	void UpdateAnimation(float deltaTime);
+
+	void SetTexture(Texture* Texture);
+	void SetPosition(float X, float Y, float Z);
+	void SetPosition(Vector3 Position);
+	Vector3 GetPosition();
+	void SetScale(float X, float Y, float Z);
+	void SetScale(Vector3 Scale);
+	bool checkDraw();
+	Vector3 GetScale();
+	void SetRotation(float X, float Y, float Z);
+	void SetRotation(Vector3 Rotation);
+	Vector3 GetRotation();
+	Vector2 GetBox();
+	int GetID();
+
+	b2Body* getBody();
+
+	Texture* getTexture();
+	Shaders* getShaders();
+	Model* getModel();
+
+	void SetIsTarget(bool Target) { m_bIsTarget = Target; }
+	bool GetIsTarget() { return m_bIsTarget; }
+
+	void SetBodyObject(b2World* world);
 };
+

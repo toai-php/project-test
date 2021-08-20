@@ -1,27 +1,33 @@
 #pragma once
 #include "../Utilities/utilities.h"
 
-class Shaders 
+class Shaders
 {
+private:
+
 public:
-	GLuint program, vertexShader, fragmentShader;
-	char fileVS[260];
-	char fileFS[260];
-	GLint positionAttribute;
-	GLint colorAttribute;
-	GLint uvAttribute;
-	GLint normalAttribute;
-	GLint cubeAttribute;
-	GLint uniformLocation;
-	GLint mvpUniform;
-	GLint rUniform;
-	GLint gUniform;
-	GLint bUniform;
-	GLint heightMapUniform;
-	GLint timeUniform;
-	GLint fogStartUniform;
-	GLint fogLengthUniform;
-	GLint fogColorUniform;
-	int Init(char * fileVertexShader, char * fileFragmentShader);
+	int m_Depth_Test, m_Cull_Face, m_Blend;
+	Shaders(int ID, char* fileVertexShader, char* fileFragmentShader, int depth_Test = 0, int cull_Face = 0, int Blend = 0);
+	Shaders() {};
 	~Shaders();
+
+	GLuint program, vertexShader, fragmentShader;
+	int m_Id;
+	char m_fileVS[250];
+	char m_fileFS[250];
+	GLint m_aPosition, m_aCPosition;
+	GLint m_aColor;
+	GLint m_aUV;
+	GLint m_uTexture, m_uWVP, m_uCWVP, m_uCubeTexture, m_uDistanceToCamera;
+	GLint m_uBlendTexture, m_uHeightmap, m_uTexture1, m_uTexture2, m_uTexture3;
+	GLint m_uTextures[5];
+
+	GLint m_uTime;
+
+	int Init();
+
+	void SetFileVS(char* filepath) { strcpy_s(m_fileVS, sizeof m_fileVS, filepath); };
+	void SetFileFS(char* filepath) { strcpy_s(m_fileFS, sizeof m_fileFS, filepath); };
+
+	int GetID() { return m_Id; }
 };

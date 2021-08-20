@@ -1,14 +1,11 @@
-attribute vec3 a_posL;
+attribute vec3 a_Position;
+varying vec4 v_pos;
+varying float v_dist;
+uniform mat4 u_WVP;
 
-uniform mat4 u_mvpMatrix;
-
-varying vec3 v_pos;
-varying float dis;
 void main()
 {
-vec4 posL = vec4(a_posL, 1.0);
-gl_Position = u_mvpMatrix*posL;
-dis = length(gl_Position.xyz);
-v_pos = a_posL;
+	v_dist = length(u_WVP * vec4(a_Position, 1.0));
+	gl_Position = u_WVP * vec4(a_Position, 1.0);
+	v_pos = vec4(a_Position, 1.0);
 }
-   

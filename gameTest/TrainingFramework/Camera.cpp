@@ -1,326 +1,146 @@
 #include "stdafx.h"
+#include <iostream>
 #include "Camera.h"
 #include "Globals.h"
-#include<iostream>
+#include "define.h"
 
-Camera* Camera::s_instance = NULL;
+Camera* Camera::s_Instance = NULL;
 
-Camera::Camera() {
-	keyPressed = 0;	
-	m_moveVertical = 0;
-	m_moveHorizontal = 0;
-	m_rotVertical = 0;
-	m_rotHorizontal = 0;
-	m_limitRotVertical = 0;
+Camera::Camera(void)
+{
+	m_ViewMatrix.SetZero();
+	m_bIsChange = true;
+	i_state = 0;
+	is_shoot = false;
+	is_wound = false;
 }
+
+Camera* Camera::GetInstance()
+{
+	if (!s_Instance)
+		s_Instance = new Camera();
+	return s_Instance;
+}
+
 
 Camera::~Camera() {
 
 }
 
-void Camera::Init(float m_fov, float m_near, float m_far) {
-	m_FOV = m_fov;
-	m_Near = m_near;
-	m_Far = m_far;
+void Camera::Init(float FOV, float Near, float Far, float Move_Speed, float Rotate_Speed) {
+	m_FOV = FOV;
+	m_Near = Near;
+	m_Far = Far;
+	initOrtho();
+	initView();
 }
 
-void Camera::SetPosition(float x, float y, float z) {
-	m_position = Vector3(x, y, z);
-}
+void Camera::Update(float deltaTime) {
 
-void Camera::SetTarget(float x, float y, float z) {
-	m_target = Vector3(x, y, z);
-}
 
-void Camera::SetUp(float x, float y, float z) {
-	m_up = Vector3(x, y, z);
-}
-
-void Camera::SetFogStart(float x) {
-	m_fog_start = x;
-}
-
-void Camera::SetFogLength(float x) {
-	m_fog_length = x;
-}
-
-void Camera::SetFogColor(float x, float y, float z) {
-	m_fog_color = Vector3(x, y, z);
-}
-
-float Camera::GetFogStart() {
-	return m_fog_start;
-}
-
-float Camera::GetFogLength() {
-	return m_fog_length;
-}
-
-Vector3 Camera::GetFogColor() {
-	return m_fog_color;
-}
-
-void Camera::SetSpeed(float move_speed, float rot_speed) {
-	m_move_speed = move_speed;
-	m_rot_speed = rot_speed;
-}
-
-void Camera::Update(float deltatime) {
-	CheckMove();
-	Vector3 m_move = Vector3(0, 0, 0);
-	if (m_moveVertical == 1) {
-		m_move += (m_position - m_target).Normalize();
-	} 
-	if (m_moveVertical == -1) {
-		m_move += - (m_position - m_target).Normalize();
-	}
-	if (m_moveHorizontal == 1) {
-		m_move += (m_up.Cross((m_position - m_target).Normalize())).Normalize();
-	}
-	if (m_moveHorizontal == -1) {
-		m_move += -(m_up.Cross((m_position - m_target).Normalize())).Normalize();
-	}
-	
-	m_position += m_move * deltatime*m_move_speed;
-	m_target += m_move * deltatime*m_move_speed;
-	
-	Vector4 localTarget = Vector4(0, 0, -(m_position - m_target).Length(), 1);
-	localTarget = localTarget * RotationMatrixAroundY(m_rotHorizontal*deltatime*m_rot_speed);
-	localTarget = localTarget * GetWorldMatrix();
-
-	m_target.x = localTarget.x;
-	m_target.y = localTarget.y;
-	m_target.z = localTarget.z;
-
-	if (m_limitRotVertical + m_rotVertical * deltatime*m_rot_speed < 1.57f && m_limitRotVertical + m_rotVertical * deltatime*m_rot_speed > -1.57f) {
-		localTarget = Vector4(0, 0, -(m_position - m_target).Length(), 1);
-		localTarget = localTarget * RotationMatrixAroundX(m_rotVertical*deltatime*m_rot_speed);
-		localTarget = localTarget * GetWorldMatrix();
-		m_limitRotVertical += m_rotVertical * deltatime*m_rot_speed;
-
-		m_target.x = localTarget.x;
-		m_target.y = localTarget.y;
-		m_target.z = localTarget.z;
-	}
-}
-
-Camera* Camera::GetInstance() {
-	if (!s_instance)
-		s_instance = new Camera();
-	return s_instance;
-}
-
-Matrix Camera::GetPerspective() {
-	float aspect = (float)Globals::screenWidth / Globals::screenHeight;
-	Matrix Perspective;
-	Perspective.SetPerspective(m_FOV, aspect, m_Near, m_Far);
-	return Perspective;
-}
-
-Matrix Camera::GetWorldMatrix() {
-	Vector3 xaxis, yaxis, zaxis;
-	zaxis = (m_position - m_target).Normalize();
-	xaxis = (m_up.Cross(zaxis)).Normalize();
-	yaxis = (zaxis.Cross(xaxis)).Normalize();
-	Matrix R, T;
-	R.m[0][0] = xaxis.x;
-	R.m[0][1] = xaxis.y;
-	R.m[0][2] = xaxis.z;
-	R.m[0][3] = 0;
-
-	R.m[1][0] = yaxis.x;
-	R.m[1][1] = yaxis.y;
-	R.m[1][2] = yaxis.z;
-	R.m[1][3] = 0;
-
-	R.m[2][0] = zaxis.x;
-	R.m[2][1] = zaxis.y;
-	R.m[2][2] = zaxis.z;
-	R.m[2][3] = 0;
-
-	R.m[3][0] = 0;
-	R.m[3][1] = 0;
-	R.m[3][2] = 0;
-	R.m[3][3] = 1;
-
-	T.m[0][0] = 1;
-	T.m[0][1] = 0;
-	T.m[0][2] = 0;
-	T.m[0][3] = 0;
-
-	T.m[1][0] = 0;
-	T.m[1][1] = 1;
-	T.m[1][2] = 0;
-	T.m[1][3] = 0;
-
-	T.m[2][0] = 0;
-	T.m[2][1] = 0;
-	T.m[2][2] = 1;
-	T.m[2][3] = 0;
-
-	T.m[3][0] = m_position.x;
-	T.m[3][1] = m_position.y;
-	T.m[3][2] = m_position.z;
-	T.m[3][3] = 1;
-	
-	m_worldMatrix = R * T;
-	return m_worldMatrix;
 }
 
 Matrix Camera::GetViewMatrix() {
-	Vector3 xaxis, yaxis, zaxis;
-	zaxis = (m_position - m_target).Normalize();
-	xaxis = (m_up.Cross(zaxis)).Normalize();
-	yaxis = (zaxis.Cross(xaxis)).Normalize();
-	m_viewMatrix.m[0][0] = xaxis.x;
-	m_viewMatrix.m[0][1] = yaxis.x;
-	m_viewMatrix.m[0][2] = zaxis.x;
-	m_viewMatrix.m[0][3] = 0;
-
-	m_viewMatrix.m[1][0] = xaxis.y;
-	m_viewMatrix.m[1][1] = yaxis.y;
-	m_viewMatrix.m[1][2] = zaxis.y;
-	m_viewMatrix.m[1][3] = 0;
-
-	m_viewMatrix.m[2][0] = xaxis.z;
-	m_viewMatrix.m[2][1] = yaxis.z;
-	m_viewMatrix.m[2][2] = zaxis.z;
-	m_viewMatrix.m[2][3] = 0;
-
-	m_viewMatrix.m[3][0] = -m_position.Dot(xaxis);
-	m_viewMatrix.m[3][1] = -m_position.Dot(yaxis);
-	m_viewMatrix.m[3][2] = -m_position.Dot(zaxis);
-	m_viewMatrix.m[3][3] = 1;
-
-	return m_viewMatrix;
+	return m_ViewMatrix;
 }
 
-Matrix Camera::RotationMatrixAroundX(float angle) {
-	Vector3 xaxis, yaxis, zaxis;
-	zaxis = (m_position - m_target).Normalize();
-	xaxis = (m_up.Cross(zaxis)).Normalize();
-	Vector4 localX = Vector4(xaxis, 0);
-	localX = localX * GetViewMatrix();
-	Matrix rotationAxis;
-	return rotationAxis.SetRotationAngleAxis(angle, localX.x, localX.y, localX.z);
-}
-
-Matrix Camera::RotationMatrixAroundY(float angle) {
-	Vector3 xaxis, yaxis, zaxis;
-	zaxis = (m_position - m_target).Normalize();
-	xaxis = (m_up.Cross(zaxis)).Normalize();
-	yaxis = (zaxis.Cross(xaxis)).Normalize();
-	Vector4 localY = Vector4(0, 1, 0, 0);
-	localY = localY * GetViewMatrix();
-	Matrix rotationAxis;
-	return rotationAxis.SetRotationAngleAxis(angle, localY.x, localY.y, localY.z);
-}
-
-void Camera::Move(char key, bool bIsPress) {
-	if (bIsPress) {
-		switch (key) {
-			case 'W':
-			case 'w':
-				keyPressed = keyPressed | MOVE_FRONT;
-				break;
-			case 'S':
-			case 's':
-				keyPressed = keyPressed | MOVE_BACK;
-				break;
-			case 'A':
-			case 'a':
-				keyPressed = keyPressed | MOVE_LEFT;
-				break;
-			case 'D':
-			case 'd':
-				keyPressed = keyPressed | MOVE_RIGHT;
-				break;
-			case '\&':
-				keyPressed = keyPressed | ROTATE_UP;
-				break;
-			case '\(':
-				keyPressed = keyPressed | ROTATE_DOWN;
-				break;
-			case '\%':
-				keyPressed = keyPressed | ROTATE_LEFT;
-				break;
-			case '\'':
-				keyPressed = keyPressed | ROTATE_RIGHT;
-				break;
-		}
-	}
-	else {
-		switch (key) {
-		case 'W':
-		case 'w':
-			keyPressed = keyPressed ^ MOVE_FRONT;
-			m_moveVertical = 0;
-			break;
-		case 'S':
-		case 's':
-			keyPressed = keyPressed ^ MOVE_BACK;
-			m_moveVertical = 0;
-			break;
-		case 'A':
-		case 'a':
-			keyPressed = keyPressed ^ MOVE_LEFT;
-			m_moveHorizontal = 0;
-			break;
-		case 'D':
-		case 'd':
-			keyPressed = keyPressed ^ MOVE_RIGHT;
-			m_moveHorizontal = 0;
-			break;
-		case '\&':
-			keyPressed = keyPressed ^ ROTATE_UP;
-			m_rotVertical = 0;
-			break;
-		case '\(':
-			keyPressed = keyPressed ^ ROTATE_DOWN;
-			m_rotVertical = 0;
-			break;
-		case '\%':
-			keyPressed = keyPressed ^ ROTATE_LEFT;
-			m_rotHorizontal = 0;
-			break;
-		case '\'':
-			keyPressed = keyPressed ^ ROTATE_RIGHT;
-			m_rotHorizontal = 0;
-			break;
-		}
-	}
-}
-
-void Camera::CheckMove() {
-	if (keyPressed & MOVE_FRONT) {
-		m_moveVertical = -1.0f;
-	}
-	if (keyPressed & MOVE_BACK) {
-		m_moveVertical = 1.0f;
-	}
-	if (keyPressed & MOVE_LEFT) {
-		m_moveHorizontal = -1.0f;
-	}
-	if (keyPressed & MOVE_RIGHT) {
-		m_moveHorizontal = 1.0f;
-	}
-	if (keyPressed & ROTATE_UP) {
-		m_rotVertical = 1.0f;
-	}
-	if (keyPressed & ROTATE_DOWN) {
-		m_rotVertical = -1.0f;
-	}
-	if (keyPressed & ROTATE_LEFT) {
-		m_rotHorizontal = 1.0f;
-	}
-	if (keyPressed & ROTATE_RIGHT) {
-		m_rotHorizontal = -1.0f;
-	}
+Matrix Camera::GetOrthographic() {
+	return Omatrix;
 }
 
 void Camera::CleanUp() {
-	if (s_instance) {
-		delete s_instance;
-		s_instance = NULL;
+	if (s_Instance)
+	{
+		delete s_Instance;
+		s_Instance = NULL;
 	}
+}
+
+void Camera::SetTarget(Vector3 Target) {
+	m_Target = Target;
+	m_TargetPosition = Target;
+	initView();
+}
+
+void Camera::SetTarget(float X, float Y, float Z) {
+	m_Target = Vector3(X, Y, Z);
+	initView();
+}
+
+Vector3 Camera::GetTarget() {
+	return m_TargetPosition;
+}
+
+void Camera::initView()
+{
+	Vector3 xaxis, yaxis, zaxis;
+	zaxis = (m_Position - m_Target).Normalize();
+	xaxis = (m_Up.Cross(zaxis)).Normalize();
+	yaxis = (zaxis.Cross(xaxis)).Normalize();
+
+	m_ViewMatrix.m[0][0] = xaxis.x;
+	m_ViewMatrix.m[0][1] = yaxis.x;
+	m_ViewMatrix.m[0][2] = zaxis.x;
+	m_ViewMatrix.m[0][3] = 0;
+
+	m_ViewMatrix.m[1][0] = xaxis.y;
+	m_ViewMatrix.m[1][1] = yaxis.y;
+	m_ViewMatrix.m[1][2] = zaxis.y;
+	m_ViewMatrix.m[1][3] = 0;
+
+	m_ViewMatrix.m[2][0] = xaxis.z;
+	m_ViewMatrix.m[2][1] = yaxis.z;
+	m_ViewMatrix.m[2][2] = zaxis.z;
+	m_ViewMatrix.m[2][3] = 0;
+
+	m_ViewMatrix.m[3][0] = -m_Position.Dot(xaxis);
+	m_ViewMatrix.m[3][1] = -m_Position.Dot(yaxis);
+	m_ViewMatrix.m[3][2] = -m_Position.Dot(zaxis);
+	m_ViewMatrix.m[3][3] = 1;
+}
+
+void Camera::initOrtho()
+{
+	float left = -960.0f;
+	float right = 960.0f;
+	float top = -720.0f;
+	float bottom = 720.0f;
+	float cfar = m_Far, cnear = m_Near;
+	Omatrix.m[0][0] = 2 / (right - left);
+	Omatrix.m[0][1] = 0;
+	Omatrix.m[0][2] = 0;
+	Omatrix.m[0][3] = -(right + left) / (right - left);
+
+	Omatrix.m[1][0] = 0;
+	Omatrix.m[1][1] = 2 / (top - bottom);
+	Omatrix.m[1][2] = 0;
+	Omatrix.m[1][3] = -(top + bottom) / (top - bottom);
+
+	Omatrix.m[2][0] = 0;
+	Omatrix.m[2][1] = 0;
+	Omatrix.m[2][2] = -2 / (cfar - cnear);
+	Omatrix.m[2][3] = -(cfar + cnear) / (cfar - cnear);
+
+	Omatrix.m[3][0] = 0;
+	Omatrix.m[3][1] = 0;
+	Omatrix.m[3][2] = 0;
+	Omatrix.m[3][3] = 1;
+}
+
+void Camera::SetPosition(float X, float Y, float Z) {
+	m_Position = Vector3(X, Y, Z);
+}
+
+void Camera::SetPosition(float X, float Y)
+{
+	m_Position.x = X;
+	m_Position.y = Y;
+}
+
+void Camera::SetPosition(Vector3 Position) {
+	m_Position = Position;
+}
+
+Vector3 Camera::GetPosition() {
+	return m_Position;
 }

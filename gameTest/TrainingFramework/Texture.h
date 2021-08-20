@@ -1,15 +1,16 @@
 #pragma once
+#include <GLES2/gl2.h>
+class Texture
+{
+private:
+	char m_srcTexture[250];
+	int m_Id;
 
-#include "../Utilities/utilities.h"
-
-class Texture {
-//private:
-//	static Texture* s_Instance;
 public:
-	Texture();
+	Texture(int ID, char* srcTexture);
 	~Texture();
-	void Init(char* filename);
-	void loadCube(char* rightfile, char* leftfile, char* topfile, char* botfile, char* frontfile, char* backfile);
-	void loadCube(char* filename);
-//	static Texture* GetInstance();
+	GLuint mTextureId;
+	void Init();
+	int GetID() { return m_Id; }
+	char* GetSource();
 };

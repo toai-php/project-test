@@ -1,61 +1,51 @@
 #pragma once
-#include <math.h>
-#include "../Utilities/utilities.h"
 
-#define MOVE_FRONT 1
-#define MOVE_BACK 1 << 1
-#define MOVE_LEFT 1 << 2
-#define MOVE_RIGHT 1 << 3
+#include "../Utilities/utilities.h" // if you use STL, please include this line AFTER all other include
+#include "Math.h"
 
-#define ROTATE_LEFT 1 << 4
-#define ROTATE_RIGHT 1 << 5
-#define ROTATE_UP 1 << 6
-#define ROTATE_DOWN 1 << 7
 
-class Camera {
+class Camera
+{
 private:
-	static Camera* s_instance;
-	float m_FOV;
-	float m_Near;
-	float m_Far;
-	float m_fog_start;
-	float m_fog_length;
-	float m_move_speed;
-	float m_rot_speed;
-	float m_rotVertical;
-	float m_rotHorizontal;
-	float m_moveVertical;
-	float m_moveHorizontal;
-	float m_limitRotVertical;
-	int keyPressed;
-	Vector3 m_position;
-	Vector3 m_target;
-	Vector3 m_up;
-	Vector3 m_fog_color;
-	Matrix m_viewMatrix;
-	Matrix m_worldMatrix;
+	static Camera* s_Instance;
+	float m_FOV, m_Near, m_Far;
+	bool m_bIsChange;
+	bool m_bIsChangePers;
+
+	Vector3 m_Up;
+	Vector3 m_Target;
+	Vector3 m_Position;
+	Vector3 m_TargetPosition;
+
+	Matrix m_ViewMatrix;
+	Matrix Omatrix;
+
+	int keyPressed = 0;
 public:
+	GLuint iboId;
 	Camera();
 	~Camera();
-	void Init(float m_fov, float m_near, float m_far);
-	void SetPosition(float x, float y, float z);
-	void SetTarget(float x, float y, float z);
-	void SetUp(float x, float y, float z);
-	void SetFogStart(float x);
-	void SetFogLength(float x);
-	void SetFogColor(float x, float y, float z);
-	float GetFogStart();
-	float GetFogLength();
-	Vector3 GetFogColor();
-	void SetSpeed(float m_move_speed, float m_rot_speed);
-	void Update(float deltatime);
-	void Move(char key, bool bIsPressed);
-	void CheckMove();
-	void CleanUp();
 	static Camera* GetInstance();
-	Matrix GetPerspective();
+	int i_state;
+	Matrix GetOrthographic();
 	Matrix GetViewMatrix();
-	Matrix GetWorldMatrix();
-	Matrix RotationMatrixAroundX(float angle);
-	Matrix RotationMatrixAroundY(float angle);
+
+	void Init(float FOV, float Near, float Far, float Move_Speed, float Rotate_Speed);
+	void Update(float deltaTime);
+	void CleanUp();
+	bool is_shoot;
+	bool is_wound;
+
+	void initView();
+	void initOrtho();
+	void SetPosition(float X, float Y, float Z);
+	void SetPosition(float X, float Y);
+	void SetPosition(Vector3 Position);
+	Vector3 GetPosition();
+	void SetTarget(Vector3 Target);
+	void SetTarget(float X, float Y, float Z);
+	Vector3 GetTarget();
+	void SetUp(Vector3 Up) { m_Up = Up; }
+	Vector3 GetUp() { return m_Up; }
 };
+

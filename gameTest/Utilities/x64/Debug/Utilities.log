@@ -1,0 +1,11 @@
+﻿  esUtil_win.cpp
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\esUtil_win.cpp(19,84): error C2065: 'GWL_USERDATA': undeclared identifier
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\esUtil_win.cpp(34,77): error C2065: 'GWL_USERDATA': undeclared identifier
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\esUtil_win.cpp(43,77): error C2065: 'GWL_USERDATA': undeclared identifier
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\esUtil_win.cpp(102,41): error C2065: 'GWL_USERDATA': undeclared identifier
+  Math.cpp
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\Math.cpp(10,13): warning C4244: 'return': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\Math.cpp(104,13): warning C4244: 'return': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\toais\Documents\GitHub\training_intern\3D_Training\Utilities\Math.cpp(208,13): warning C4244: 'return': conversion from 'double' to 'GLfloat', possible loss of data
+  TGA.cpp
+  Generating Code...

@@ -1,11 +1,11 @@
 #pragma once
-#include "Math.h"
+#include "../Utilities/Math.h"
 
-struct Vertex 
+struct Vertex
 {
-	Vector3 position;
-	Vector3 normal;
-	Vector3 bitangent;
-	Vector3 tangent;
+	Vertex();
+	Vertex(const Vertex &v);
+	Vector3 pos;
 	Vector2 uv;
+
 };

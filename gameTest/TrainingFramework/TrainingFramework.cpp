@@ -3,55 +3,56 @@
 
 #include "stdafx.h"
 #include "../Utilities/utilities.h" // if you use STL, please include this line AFTER all other include
-#include "Vertex.h"
-#include "Shaders.h"
-#include "Texture.h"
 #include "Globals.h"
-#include "Model.h"
-#include "Object.h"
-#include "Camera.h"
 #include "SceneManager.h"
-#include "ResourceManager.h"
+#include "ResourcesManager.h"
 #include <conio.h>
-#include <iostream>
-
-//Object obj1, obj2, skyBox;
-
+#include <cstddef>
+#include "Camera.h"
+#include <memory>
 int Init ( ESContext *esContext )
-{	
+{
 	glClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	SceneManager::GetInstance()->Init();
-	ResourceManager::GetInstance()->Init();
+	
+	char* SM = "../Resources/Managers/SM1.txt";
+	char* MAP = "../Resources/Map/maplv1.txt";
+	Singleton<SceneManager>::GetInstance()->SetFileManager(SM, MAP);
+	printf("ok\n");
+	Singleton<SceneManager>::GetInstance()->Init();
+	printf("ok\n");
+
 	return 0;
 }
 
 void Draw ( ESContext *esContext )
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	skyBox.Draw();	
-//	obj1.Draw();
-//	obj2.Draw();
-	SceneManager::GetInstance()->Draw();
-	eglSwapBuffers ( esContext->eglDisplay, esContext->eglSurface );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	Camera::GetInstance()->i_state = 1;
+	Singleton<SceneManager>::GetInstance()->Draw();
+	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 }
 
 void Update ( ESContext *esContext, float deltaTime )
 {
-	SceneManager::GetInstance()->Update(deltaTime);
+	Singleton<SceneManager>::GetInstance()->Update(deltaTime);
+
 }
 
 void Key ( ESContext *esContext, unsigned char key, bool bIsPressed)
 {
-	SceneManager::GetInstance()->MoveCamera(key, bIsPressed);
+	Singleton<SceneManager>::GetInstance()->Key(key, bIsPressed);
 }
 
 void CleanUp()
 {
-	SceneManager::GetInstance()->CleanUP();
-	ResourceManager::GetInstance()->CleanUp();
+	Singleton<SceneManager>::GetInstance()->CleanUp();
+	Singleton<SceneManager>::GetInstance()->FreeInstance();
+	ResourcesManager::getInstance()->clearMem();
+	delete ResourcesManager::getInstance();
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -71,7 +72,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	esMainLoop ( &esContext );
 
-	SceneManager::GetInstance()->MemoryClear();
 	//releasing OpenGL resources
 	CleanUp();
 
