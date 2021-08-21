@@ -21,6 +21,8 @@ void Ground::Init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_numberOfIndices * sizeof(int), indic, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	delete[] verticesData;
+	delete[] indic;
 }
 
 void Ground::Draw()

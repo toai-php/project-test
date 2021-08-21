@@ -11,7 +11,6 @@ private:
 	int m_NumberOfVertices = 0;
 	int m_NumberOfIndices = 0;
 
-	Vertex* verticesData;
 	std::vector<Animation*> m_anim;;
 	int m_Id;
 	char m_srcModel[250];

@@ -36,6 +36,7 @@ Texture* Object::getTexture() {
 
 
 Object::~Object() {
+	
 }
 
 void Object::InitWVP()
@@ -101,9 +102,7 @@ void Object::UpdateWVP() {
 }
 
 void Object::CleanUp() {
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	
 }
 
 void Object::setModel(Model* mmodel)
@@ -191,4 +190,9 @@ void Object::UpdateAnimation(float deltaTime) {
 }
 
 void Object::DeleteObject() {
+	if (m_Model != NULL) {
+		m_Model->DeleteAnimation();
+		delete m_Model;
+		m_Model = NULL;
+	}
 }

@@ -33,6 +33,9 @@ void ResourcesManager::clearMem()
 	for (int i = 0; i < m_Animations.size(); i++) {
 		delete m_Animations[i];
 	}
+	for (int i = 0; i < m_DumpAnim.size(); i++) {
+		delete m_DumpAnim[i];
+	}
 }
 
 void ResourcesManager::ReadFile(FILE * f_RM)
@@ -183,4 +186,9 @@ Texture * ResourcesManager::GetTerrainAtID(int ID)
 		}
 	}
 	return NULL;
+}
+
+void ResourcesManager::addDumpAnim(Animation * anim)
+{
+	m_DumpAnim.push_back(anim);
 }

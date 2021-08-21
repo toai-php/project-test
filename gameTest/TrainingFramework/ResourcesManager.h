@@ -12,6 +12,7 @@ private:
 	std::vector<Animation*> m_Animations;
 	std::vector<Texture*> m_TerrainTextures;
 	std::vector<Texture*> m_BackgroundTextures;
+	std::vector<Animation*> m_DumpAnim;
 public:
 	static ResourcesManager* getInstance() {
 		if (ms_pInstance == NULL) {
@@ -28,5 +29,6 @@ public:
 	Shaders* GetShaderAtID(int ID);
 	Texture* GetBackgroundAtID(int ID);
 	Texture* GetTerrainAtID(int ID);
+	void addDumpAnim(Animation * anim);
 };
 

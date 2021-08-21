@@ -458,7 +458,7 @@ void SceneManager::CleanUp() {
 		for (int j = 0; j < (int)m_listTerrain[i].size(); j++) {
 			if (m_listTerrain[i][j] != NULL) {
 				m_listTerrain[i][j]->CleanUp();
-//				delete m_listTerrain[i][j]->getModel();
+				//delete m_listTerrain[i][j]->getModel();
 				delete m_listTerrain[i][j];
 			}
 		}
@@ -935,8 +935,8 @@ void SceneManager::Update(float deltaTime) {
 					}
 				}
 				m_world->DestroyBody(m_listEnemyInWorld[i]->getBody());
-//				m_listEnemyInWorld[i]->DeleteObject();
-//				delete m_listEnemyInWorld[i];
+				//m_listEnemyInWorld[i]->DeleteObject();
+	//			delete m_listEnemyInWorld[i];
 				m_listEnemyInWorld.erase(m_listEnemyInWorld.begin() + i);
 				i--;
 			}

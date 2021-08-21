@@ -6,7 +6,6 @@
 
 Enemy::~Enemy()
 {
-//	if (m_Model != NULL) delete m_Model;
 	printf("hello\n");
 }
 

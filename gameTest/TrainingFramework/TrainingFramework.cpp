@@ -49,9 +49,9 @@ void Key ( ESContext *esContext, unsigned char key, bool bIsPressed)
 
 void CleanUp()
 {
+	ResourcesManager::getInstance()->clearMem();
 	Singleton<SceneManager>::GetInstance()->CleanUp();
 	Singleton<SceneManager>::GetInstance()->FreeInstance();
-	ResourcesManager::getInstance()->clearMem();
 	delete ResourcesManager::getInstance();
 }
 
